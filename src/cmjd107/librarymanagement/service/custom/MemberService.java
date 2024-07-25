@@ -4,13 +4,13 @@
  */
 package cmjd107.librarymanagement.service.custom;
 
-import cmjd107.librarymanagement.dto.UserDto;
+import cmjd107.librarymanagement.dto.MemberDto;
 import cmjd107.librarymanagement.service.CrudService;
 
 /**
  *
  * @author User
  */
-public interface UserService extends CrudService<UserDto, String> {
-    UserDto getUserbyName(String name) throws Exception;
+public interface MemberService extends CrudService<MemberDto, String>{
+    
 }

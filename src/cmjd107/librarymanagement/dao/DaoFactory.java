@@ -4,6 +4,7 @@
  */
 package cmjd107.librarymanagement.dao;
 
+import cmjd107.librarymanagement.dao.custom.impl.MemberDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.UserDaoImpl;
 
 /**
@@ -28,12 +29,14 @@ public class DaoFactory {
         switch (type) {
             case USER:
                return new UserDaoImpl();
+            case MEMBER:
+                return new MemberDaoImpl();
             default:
                 return null;
         }
     }
     
     public enum DaoTypes{
-        USER
+        USER, MEMBER
     }
 }

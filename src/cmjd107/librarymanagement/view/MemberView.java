@@ -4,17 +4,29 @@
  */
 package cmjd107.librarymanagement.view;
 
+import cmjd107.librarymanagement.controller.MemberController;
+import cmjd107.librarymanagement.dto.MemberDto;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class MemberView extends javax.swing.JPanel {
 
+    private final MemberController MEMBER_CONTROLLER;
+
     /**
      * Creates new form MemberView
      */
     public MemberView() {
+        MEMBER_CONTROLLER = new MemberController();
         initComponents();
+        loadTable();
     }
 
     /**
@@ -69,6 +81,11 @@ public class MemberView extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblMembers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMembersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblMembers);
 
         btnSave.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -167,16 +184,20 @@ public class MemberView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        saveMember();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        updateMember();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        deleteMember();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblMembersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMembersMouseClicked
+        searchMember();
+    }//GEN-LAST:event_tblMembersMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -194,4 +215,86 @@ public class MemberView extends javax.swing.JPanel {
     private javax.swing.JTextField txtMemberId;
     private javax.swing.JTextField txtMemberName;
     // End of variables declaration//GEN-END:variables
+
+    private void loadTable() {
+        try {
+            String[] columns = {"Member Id", "Name", "Address", "Contact Number"};
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            tblMembers.setModel(dtm);
+
+            ArrayList<MemberDto> dtos = MEMBER_CONTROLLER.getAllMembers();
+            for (MemberDto dto : dtos) {
+                Object[] rowData = {dto.getMembetId(), dto.getName(), dto.getAddress(), dto.getContactNumber()};
+                dtm.addRow(rowData);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void saveMember() {
+        try {
+            MemberDto dto = new MemberDto(txtMemberId.getText(), txtMemberName.getText(), txtAddress.getText(), Integer.parseInt(txtContactNumber.getText()));
+            String resp = MEMBER_CONTROLLER.save(dto);
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearForm() {
+        txtMemberId.setText("");
+        txtMemberName.setText("");
+        txtAddress.setText("");
+        txtContactNumber.setText("");
+    }
+
+    private void searchMember() {
+        try {
+            String memberId = (String) tblMembers.getValueAt(tblMembers.getSelectedRow(), 0);
+            MemberDto dto = MEMBER_CONTROLLER.getMemberbyId(memberId);
+            if (dto != null) {
+                txtMemberId.setText(dto.getMembetId());
+                txtMemberName.setText(dto.getName());
+                txtAddress.setText(dto.getAddress());
+                txtContactNumber.setText(dto.getContactNumber().toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "Member not found");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void updateMember() {
+        try {
+            MemberDto dto = new MemberDto(txtMemberId.getText(), txtMemberName.getText(), txtAddress.getText(), Integer.parseInt(txtContactNumber.getText()));
+            String resp = MEMBER_CONTROLLER.update(dto);
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteMember() {
+        try {
+            String resp = MEMBER_CONTROLLER.delete(txtMemberId.getText());
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
