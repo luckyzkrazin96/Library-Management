@@ -4,17 +4,29 @@
  */
 package cmjd107.librarymanagement.view;
 
+import cmjd107.librarymanagement.controller.CategoryController;
+import cmjd107.librarymanagement.dto.CategoryDto;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class CategoryView extends javax.swing.JPanel {
 
+    private final CategoryController CATEGORY_CONTROLLER;
+
     /**
      * Creates new form MemberView
      */
     public CategoryView() {
+        CATEGORY_CONTROLLER = new CategoryController();
         initComponents();
+        loadTable();
     }
 
     /**
@@ -59,6 +71,11 @@ public class CategoryView extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCategoryMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCategory);
 
         btnSave.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -140,16 +157,20 @@ public class CategoryView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        saveCategory();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        updateCategory();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        deleteCategory();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoryMouseClicked
+        searchCategory();
+    }//GEN-LAST:event_tblCategoryMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -163,4 +184,88 @@ public class CategoryView extends javax.swing.JPanel {
     private javax.swing.JTextField txtCategoryId;
     private javax.swing.JTextField txtCategoryName;
     // End of variables declaration//GEN-END:variables
+
+    private void loadTable() {
+        try {
+            String[] columns = {"Category Id", "Category Name"};
+
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            tblCategory.setModel(dtm);
+
+            ArrayList<CategoryDto> dtos = CATEGORY_CONTROLLER.getAllCategories();
+            for (CategoryDto dto : dtos) {
+                Object[] rowData = {dto.getCategoryId(), dto.getCategoryName()};
+                dtm.addRow(rowData);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void saveCategory() {
+        try {
+            CategoryDto dto = new CategoryDto(txtCategoryId.getText(), txtCategoryName.getText());
+            String rst = CATEGORY_CONTROLLER.save(dto);
+            JOptionPane.showMessageDialog(this, rst);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearForm() {
+        txtCategoryId.setText("");
+        txtCategoryName.setText("");
+    }
+
+    private void updateCategory() {
+        try {
+            CategoryDto dto = new CategoryDto(txtCategoryId.getText(), txtCategoryName.getText());
+            String rst = CATEGORY_CONTROLLER.update(dto);
+
+            JOptionPane.showMessageDialog(this, rst);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteCategory() {
+        try {
+            String rst = CATEGORY_CONTROLLER.delete(txtCategoryId.getText());
+            JOptionPane.showMessageDialog(this, rst);
+            clearForm();
+            loadTable();
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void searchCategory() {
+        try {
+            String categoryId = (String) tblCategory.getValueAt(tblCategory.getSelectedRow(), 0);
+            CategoryDto dto = CATEGORY_CONTROLLER.getCategorybyId(categoryId);
+
+            if (dto != null) {
+                txtCategoryId.setText(dto.getCategoryId());
+                txtCategoryName.setText(dto.getCategoryName());
+            } else {
+                JOptionPane.showMessageDialog(this, "Category not found");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

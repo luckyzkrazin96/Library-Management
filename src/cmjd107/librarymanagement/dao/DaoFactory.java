@@ -4,6 +4,7 @@
  */
 package cmjd107.librarymanagement.dao;
 
+import cmjd107.librarymanagement.dao.custom.impl.CategoryDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.MemberDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.UserDaoImpl;
 
@@ -12,31 +13,34 @@ import cmjd107.librarymanagement.dao.custom.impl.UserDaoImpl;
  * @author User
  */
 public class DaoFactory {
+
     private static DaoFactory daoFactory;
-    
-    private DaoFactory(){
-        
+
+    private DaoFactory() {
+
     }
-    
-    public static DaoFactory getInstance(){
+
+    public static DaoFactory getInstance() {
         if (daoFactory == null) {
             daoFactory = new DaoFactory();
         }
         return daoFactory;
     }
-    
-    public SuperDao getDao(DaoTypes type){
+
+    public SuperDao getDao(DaoTypes type) {
         switch (type) {
             case USER:
-               return new UserDaoImpl();
+                return new UserDaoImpl();
             case MEMBER:
                 return new MemberDaoImpl();
+            case CATEGORY:
+                return new CategoryDaoImpl();
             default:
                 return null;
         }
     }
-    
-    public enum DaoTypes{
-        USER, MEMBER
+
+    public enum DaoTypes {
+        USER, MEMBER, CATEGORY
     }
 }
