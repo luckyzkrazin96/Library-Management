@@ -4,17 +4,34 @@
  */
 package cmjd107.librarymanagement.view;
 
+import cmjd107.librarymanagement.controller.BookController;
+import cmjd107.librarymanagement.controller.CategoryController;
+import cmjd107.librarymanagement.dto.BookDto;
+import cmjd107.librarymanagement.dto.CategoryDto;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class BookView extends javax.swing.JPanel {
 
+    private final CategoryController CATEGORY_CONTROLLER;
+    private final BookController BOOK_CONTROLLER;
+
     /**
      * Creates new form MemberView
      */
     public BookView() {
+        CATEGORY_CONTROLLER = new CategoryController();
+        BOOK_CONTROLLER = new BookController();
         initComponents();
+        loadCmbCategories();
+        loadBooks();
     }
 
     /**
@@ -71,6 +88,11 @@ public class BookView extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblBooks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBooksMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblBooks);
 
         btnSave.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -142,8 +164,8 @@ public class BookView extends javax.swing.JPanel {
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -182,16 +204,20 @@ public class BookView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        saveBook();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        updateBook();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        deleteBook();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblBooksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBooksMouseClicked
+        searchBook();
+    }//GEN-LAST:event_tblBooksMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,4 +237,108 @@ public class BookView extends javax.swing.JPanel {
     private javax.swing.JTextField txtQty;
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
+
+    private void loadCmbCategories() {
+        try {
+            ArrayList<CategoryDto> dtos = CATEGORY_CONTROLLER.getAllCategories();
+
+            cmbCategory.removeAllItems();
+
+            for (CategoryDto dto : dtos) {
+                cmbCategory.addItem(dto.getCategoryName());
+            }
+            cmbCategory.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadBooks() {
+        try {
+            String[] columns = {"Book Id", "Title", "Author", "Category", "Qty on Hand"};
+
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            tblBooks.setModel(dtm);
+
+            ArrayList<BookDto> dtos = BOOK_CONTROLLER.getAllBooks();
+            for (BookDto dto : dtos) {
+                CategoryDto categoryDto = CATEGORY_CONTROLLER.getCategorybyId(dto.getCategoryId());
+                Object[] rowData = {dto.getBookId(), dto.getTitle(), dto.getAuthor(), categoryDto.getCategoryName(), dto.getQty()};
+                dtm.addRow(rowData);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void saveBook() {
+        try {
+            CategoryDto categoryDto = CATEGORY_CONTROLLER.getCategoryByName((String) cmbCategory.getSelectedItem());
+            BookDto bookDto = new BookDto(txtBookId.getText(), categoryDto.getCategoryId(), txtTitle.getText(), txtAuthor.getText(), Integer.parseInt(txtQty.getText()));
+            String rst = BOOK_CONTROLLER.save(bookDto);
+            JOptionPane.showMessageDialog(this, rst);
+            clearForm();
+            loadBooks();
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearForm() {
+        txtBookId.setText("");
+        txtTitle.setText("");
+        txtAuthor.setText("");
+        txtQty.setText("");
+        cmbCategory.setSelectedIndex(-1);
+    }
+
+    private void updateBook() {
+        try {
+            CategoryDto categoryDto = CATEGORY_CONTROLLER.getCategoryByName((String) cmbCategory.getSelectedItem());
+            BookDto bookDto = new BookDto(txtBookId.getText(), categoryDto.getCategoryId(), txtTitle.getText(), txtAuthor.getText(), Integer.parseInt(txtQty.getText()));
+            String resp = BOOK_CONTROLLER.update(bookDto);
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            loadBooks();
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void searchBook() {
+        try {
+            String BookId = (String) tblBooks.getValueAt(tblBooks.getSelectedRow(), 0);
+            BookDto bookDto = BOOK_CONTROLLER.getBookById(BookId);
+
+            if (bookDto != null) {
+                CategoryDto categoryDto = CATEGORY_CONTROLLER.getCategorybyId(bookDto.getCategoryId());
+                txtBookId.setText(bookDto.getBookId());
+                txtTitle.setText(bookDto.getTitle());
+                txtAuthor.setText(bookDto.getAuthor());
+                txtQty.setText(bookDto.getQty().toString());
+                cmbCategory.setSelectedItem(categoryDto.getCategoryName());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteBook() {
+        try {
+            String resp = BOOK_CONTROLLER.delete(txtBookId.getText());
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            loadBooks();
+        } catch (Exception ex) {
+            Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

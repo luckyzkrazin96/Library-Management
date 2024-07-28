@@ -5,13 +5,12 @@
 package cmjd107.librarymanagement.dao.custom;
 
 import cmjd107.librarymanagement.dao.CrudDao;
-import cmjd107.librarymanagement.entity.CategoryEntity;
+import cmjd107.librarymanagement.entity.BookEntity;
 
 /**
  *
  * @author User
  */
-public interface CategoryDao extends CrudDao<CategoryEntity, String> {
-
-    CategoryEntity getCategoryByName(String name) throws Exception;
+public interface BookDao extends CrudDao<BookEntity, String>{
+    
 }

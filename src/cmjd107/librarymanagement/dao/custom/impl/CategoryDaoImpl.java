@@ -9,6 +9,7 @@ import cmjd107.librarymanagement.dao.custom.CategoryDao;
 import cmjd107.librarymanagement.entity.CategoryEntity;
 import java.util.ArrayList;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -52,6 +53,15 @@ public class CategoryDaoImpl implements CategoryDao {
             entities.add(entity);
         }
         return entities;
+    }
+
+    @Override
+    public CategoryEntity getCategoryByName(String name) throws Exception {
+        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM category WHERE categoryName = ?", name);
+        if (rst.next()) {
+            return new CategoryEntity(rst.getString("CategoryId"), rst.getString("CategoryName"));
+        }
+        return null;
     }
 
 }

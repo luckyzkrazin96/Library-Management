@@ -36,4 +36,8 @@ public class CategoryController {
     public ArrayList<CategoryDto> getAllCategories() throws Exception {
         return categoryService.getAll();
     }
+    
+    public CategoryDto getCategoryByName(String name) throws Exception{
+        return categoryService.getCategorybyName(name);
+    }
 }

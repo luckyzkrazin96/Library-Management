@@ -11,6 +11,7 @@ import cmjd107.librarymanagement.service.CrudService;
  *
  * @author User
  */
-public interface CategoryService extends CrudService<CategoryDto, String>{
-    
+public interface CategoryService extends CrudService<CategoryDto, String> {
+
+    CategoryDto getCategorybyName(String name) throws Exception;
 }

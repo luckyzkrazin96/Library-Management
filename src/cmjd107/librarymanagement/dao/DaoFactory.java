@@ -4,6 +4,7 @@
  */
 package cmjd107.librarymanagement.dao;
 
+import cmjd107.librarymanagement.dao.custom.impl.BookDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.CategoryDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.MemberDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.UserDaoImpl;
@@ -35,12 +36,14 @@ public class DaoFactory {
                 return new MemberDaoImpl();
             case CATEGORY:
                 return new CategoryDaoImpl();
+            case BOOK:
+                return new BookDaoImpl();
             default:
                 return null;
         }
     }
 
     public enum DaoTypes {
-        USER, MEMBER, CATEGORY
+        USER, MEMBER, CATEGORY, BOOK
     }
 }
