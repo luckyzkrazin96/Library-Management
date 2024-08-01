@@ -12,5 +12,5 @@ import cmjd107.librarymanagement.service.CrudService;
  * @author User
  */
 public interface BurrowingService extends CrudService<BurrowingDto, String>{
-    
+    public String makeBurrowing(BurrowingDto burrowingDto) throws Exception;
 }

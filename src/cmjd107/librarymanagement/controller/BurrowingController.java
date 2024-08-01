@@ -4,6 +4,7 @@
  */
 package cmjd107.librarymanagement.controller;
 
+import cmjd107.librarymanagement.dto.BurrowingDto;
 import cmjd107.librarymanagement.service.ServiceFactory;
 import cmjd107.librarymanagement.service.custom.BurrowingService;
 
@@ -17,5 +18,9 @@ public class BurrowingController {
 
     public String getLatestId() throws Exception {
         return burrowingService.getLatestId();
+    }
+
+    public String makeBurrowing(BurrowingDto burrowingDto) throws Exception {
+        return burrowingService.makeBurrowing(burrowingDto);
     }
 }

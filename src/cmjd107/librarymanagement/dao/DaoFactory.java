@@ -6,6 +6,7 @@ package cmjd107.librarymanagement.dao;
 
 import cmjd107.librarymanagement.dao.custom.impl.BookDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.BurrowingDaoImpl;
+import cmjd107.librarymanagement.dao.custom.impl.BurrowingDetailDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.CategoryDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.MemberDaoImpl;
 import cmjd107.librarymanagement.dao.custom.impl.UserDaoImpl;
@@ -41,12 +42,14 @@ public class DaoFactory {
                 return new BookDaoImpl();
             case BURROWING:
                 return new BurrowingDaoImpl();
+            case BURROWING_DETAIL:
+                return new BurrowingDetailDaoImpl();
             default:
                 return null;
         }
     }
 
     public enum DaoTypes {
-        USER, MEMBER, CATEGORY, BOOK, BURROWING
+        USER, MEMBER, CATEGORY, BOOK, BURROWING, BURROWING_DETAIL
     }
 }

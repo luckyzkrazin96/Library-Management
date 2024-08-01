@@ -8,10 +8,16 @@ import cmjd107.librarymanagement.controller.BookController;
 import cmjd107.librarymanagement.controller.BurrowingController;
 import cmjd107.librarymanagement.controller.MemberController;
 import cmjd107.librarymanagement.dto.BookDto;
+import cmjd107.librarymanagement.dto.BurrowingDetailDto;
+import cmjd107.librarymanagement.dto.BurrowingDto;
 import cmjd107.librarymanagement.dto.MemberDto;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,6 +28,7 @@ public class BurrowingView extends javax.swing.JPanel {
     private final BookController BOOK_CONTROLLER;
     private final MemberController MEMBER_CONTROLLER;
     private final BurrowingController BURROWING_CONTROLLER;
+    private ArrayList<BurrowingDetailDto> burrowingDetailDtos = new ArrayList<>();
 
     /**
      * Creates new form MemberView
@@ -34,6 +41,8 @@ public class BurrowingView extends javax.swing.JPanel {
         loadCmbBookId();
         loadCmbMemberId();
         loadBurrowingId();
+        loadTable();
+
     }
 
     /**
@@ -49,7 +58,7 @@ public class BurrowingView extends javax.swing.JPanel {
         txtBurrowingId = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblReturns = new javax.swing.JTable();
+        tblBurrowingView = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         cmbBookId = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -59,6 +68,7 @@ public class BurrowingView extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         txtQty = new javax.swing.JTextField();
         btnBurrow = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(204, 255, 255));
         setBorder(javax.swing.BorderFactory.createTitledBorder("Book Burrowing"));
@@ -73,7 +83,7 @@ public class BurrowingView extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Book Id");
 
-        tblReturns.setModel(new javax.swing.table.DefaultTableModel(
+        tblBurrowingView.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -84,7 +94,7 @@ public class BurrowingView extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblReturns);
+        jScrollPane1.setViewportView(tblBurrowingView);
 
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAdd.setText("Add");
@@ -137,33 +147,35 @@ public class BurrowingView extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtBurrowingId))
+                                .addComponent(txtBurrowingId, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbMemberId, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblMemberDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblBookDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cmbBookId, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbMemberId, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblBookDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(lblMemberDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtQty)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 56, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(206, 206, 206)
+                .addGap(194, 194, 194)
                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnBurrow, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -174,12 +186,25 @@ public class BurrowingView extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBurrow, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBurrowingId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbMemberId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMemberDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbBookId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -187,27 +212,14 @@ public class BurrowingView extends javax.swing.JPanel {
                         .addComponent(lblBookDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbMemberId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMemberDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(btnBurrow, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-
+        addToTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void cmbBookIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbBookIdActionPerformed
@@ -219,7 +231,7 @@ public class BurrowingView extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbMemberIdActionPerformed
 
     private void btnBurrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurrowActionPerformed
-        // TODO add your handling code here:
+        burrowBooks();
     }//GEN-LAST:event_btnBurrowActionPerformed
 
 
@@ -233,9 +245,10 @@ public class BurrowingView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblBookDetails;
     private javax.swing.JLabel lblMemberDetails;
-    private javax.swing.JTable tblReturns;
+    private javax.swing.JTable tblBurrowingView;
     private javax.swing.JTextField txtBurrowingId;
     private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
@@ -296,7 +309,7 @@ public class BurrowingView extends javax.swing.JPanel {
             String latestId = BURROWING_CONTROLLER.getLatestId();
             if (latestId == null) {
                 txtBurrowingId.setText("BU001");
-            }else{
+            } else {
                 int idNum = Integer.parseInt(latestId.substring(2));
                 idNum++;
                 String newId = String.format("BU%03d", idNum);
@@ -306,4 +319,89 @@ public class BurrowingView extends javax.swing.JPanel {
             Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    private void addToTable() {
+        try {
+            BurrowingDetailDto burrowingDetailDto = new BurrowingDetailDto();
+
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dueDate = currentDate.plusDays(7);
+
+            BookDto bookDto = BOOK_CONTROLLER.getBookById((String) cmbBookId.getSelectedItem());
+            if (Integer.parseInt(txtQty.getText()) <= bookDto.getQty()) {
+                burrowingDetailDto.setBookId((String) cmbBookId.getSelectedItem());
+                burrowingDetailDto.setQty(Integer.parseInt(txtQty.getText()));
+                burrowingDetailDto.setDueDate(dueDate.format(dtf));
+                burrowingDetailDto.setIsReturned(false);
+                burrowingDetailDtos.add(burrowingDetailDto);
+
+                Object[] rowData = {burrowingDetailDto.getBookId(), burrowingDetailDto.getQty(), burrowingDetailDto.getDueDate()};
+                DefaultTableModel dtm = (DefaultTableModel) tblBurrowingView.getModel();
+                dtm.addRow(rowData);
+                clearBook();
+                cmbMemberId.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "There are only " + bookDto.getQty() + " books left. You cannot Exeed");
+                clearBook();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadTable() {
+        String[] columns = {"BookId", "Qty", "Due Date"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tblBurrowingView.setModel(dtm);
+    }
+
+    private void clearBook() {
+        cmbBookId.setSelectedIndex(0);
+        lblBookDetails.setText("");
+        txtQty.setText("");
+    }
+
+    private void burrowBooks() {
+        try {
+            BurrowingDto burrowingDto = new BurrowingDto();
+            burrowingDto.setBurrowingId(txtBurrowingId.getText());
+            burrowingDto.setMemberId((String) cmbMemberId.getSelectedItem());
+
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String date = currentDate.format(dtf);
+            burrowingDto.setBurrowDate(date);
+
+            burrowingDto.setBurrowingDetailDtos(burrowingDetailDtos);
+
+            String resp = BURROWING_CONTROLLER.makeBurrowing(burrowingDto);
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+            cmbMemberId.setEnabled(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void clearForm() {
+        cmbMemberId.setSelectedIndex(0);
+        lblMemberDetails.setText("");
+        clearBook();
+        loadBurrowingId();
+        DefaultTableModel dtm = (DefaultTableModel) tblBurrowingView.getModel();
+        int rowCount = tblBurrowingView.getRowCount();
+        for (int i = rowCount - 1 ; i >=0 ; i--) {
+            dtm.removeRow(i);
+        }
+    }
+
 }

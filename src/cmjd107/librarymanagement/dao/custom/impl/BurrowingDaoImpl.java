@@ -18,8 +18,8 @@ public class BurrowingDaoImpl implements BurrowingDao {
 
     @Override
     public String save(BurrowingEntity t) throws Exception {
-        boolean isSaved = CrudUtil.executeUpdate("INSERT INTO burrowing VALUES (?,?,?,?,?)",
-                t.getBurrowingId(), t.getBookId(), t.getMemberId(), t.getBurrowDate(), t.getDueDate());
+        boolean isSaved = CrudUtil.executeUpdate("INSERT INTO burrowing VALUES (?,?,?)",
+                t.getBurrowingId(), t.getMemberId(), t.getBurrowDate());
         return isSaved ? "Success" : "Fail";
     }
 
@@ -43,7 +43,7 @@ public class BurrowingDaoImpl implements BurrowingDao {
         ArrayList<BurrowingEntity> entities = new ArrayList<>();
         ResultSet rst = CrudUtil.executeQuery("SELECT * FROM burrowing");
         while (rst.next()) {
-            BurrowingEntity entity = new BurrowingEntity(rst.getString("BurrowingId"), rst.getString("BookId"), rst.getString("MemberId"), rst.getDate("BurrowDate"), rst.getDate("DueDate"));
+            BurrowingEntity entity = new BurrowingEntity(rst.getString("BurrowingId"), rst.getString("MemberId"), rst.getString("BurrowDate"));
             entities.add(entity);
         }
         return entities;
@@ -56,7 +56,7 @@ public class BurrowingDaoImpl implements BurrowingDao {
         if (rst.next()) {
             latestId = rst.getString("burrowingId");
         }
-        
+
         return latestId;
     }
 

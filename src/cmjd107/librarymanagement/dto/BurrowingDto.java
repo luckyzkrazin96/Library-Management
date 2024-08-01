@@ -4,6 +4,7 @@
  */
 package cmjd107.librarymanagement.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,20 +14,19 @@ import java.util.Date;
 public class BurrowingDto {
 
     private String burrowingId;
-    private String bookId;
     private String memberId;
-    private Date burrowDate;
-    private Date dueDate;
+    private String burrowDate;
+
+    private ArrayList<BurrowingDetailDto> burrowingDetailDtos;
 
     public BurrowingDto() {
     }
 
-    public BurrowingDto(String burrowingId, String bookId, String memberId, Date burrowDate, Date dueDate) {
+    public BurrowingDto(String burrowingId, String memberId, String burrowDate, ArrayList<BurrowingDetailDto> burrowingDetailDtos) {
         this.burrowingId = burrowingId;
-        this.bookId = bookId;
         this.memberId = memberId;
         this.burrowDate = burrowDate;
-        this.dueDate = dueDate;
+        this.burrowingDetailDtos = burrowingDetailDtos;
     }
 
     /**
@@ -41,20 +41,6 @@ public class BurrowingDto {
      */
     public void setBurrowingId(String burrowingId) {
         this.burrowingId = burrowingId;
-    }
-
-    /**
-     * @return the bookId
-     */
-    public String getBookId() {
-        return bookId;
-    }
-
-    /**
-     * @param bookId the bookId to set
-     */
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
     }
 
     /**
@@ -74,35 +60,35 @@ public class BurrowingDto {
     /**
      * @return the burrowDate
      */
-    public Date getBurrowDate() {
+    public String getBurrowDate() {
         return burrowDate;
     }
 
     /**
      * @param burrowDate the burrowDate to set
      */
-    public void setBurrowDate(Date burrowDate) {
+    public void setBurrowDate(String burrowDate) {
         this.burrowDate = burrowDate;
     }
 
     /**
-     * @return the dueDate
+     * @return the burrowingDetailDtos
      */
-    public Date getDueDate() {
-        return dueDate;
+    public ArrayList<BurrowingDetailDto> getBurrowingDetailDtos() {
+        return burrowingDetailDtos;
     }
 
     /**
-     * @param dueDate the dueDate to set
+     * @param burrowingDetailDtos the burrowingDetailDtos to set
      */
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+    public void setBurrowingDetailDtos(ArrayList<BurrowingDetailDto> burrowingDetailDtos) {
+        this.burrowingDetailDtos = burrowingDetailDtos;
     }
 
     @Override
     public String toString() {
-        return "BurrowingDto{" + "burrowingId=" + burrowingId + ", bookId=" + bookId + ", memberId=" + memberId + ", burrowDate=" + burrowDate + ", dueDate=" + dueDate + '}';
+        return "BurrowingDto{" + "burrowingId=" + burrowingId + ", memberId=" + memberId + ", burrowDate=" + burrowDate + ", burrowingDetailDtos=" + burrowingDetailDtos + '}';
     }
-    
+
     
 }

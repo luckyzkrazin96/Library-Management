@@ -13,20 +13,16 @@ import java.util.Date;
 public class BurrowingEntity {
 
     private String burrowingId;
-    private String bookId;
     private String memberId;
-    private Date burrowDate;
-    private Date dueDate;
+    private String burrowDate;
 
     public BurrowingEntity() {
     }
 
-    public BurrowingEntity(String burrowingId, String bookId, String memberId, Date burrowDate, Date dueDate) {
+    public BurrowingEntity(String burrowingId, String memberId, String burrowDate) {
         this.burrowingId = burrowingId;
-        this.bookId = bookId;
         this.memberId = memberId;
         this.burrowDate = burrowDate;
-        this.dueDate = dueDate;
     }
 
     /**
@@ -41,20 +37,6 @@ public class BurrowingEntity {
      */
     public void setBurrowingId(String burrowingId) {
         this.burrowingId = burrowingId;
-    }
-
-    /**
-     * @return the bookId
-     */
-    public String getBookId() {
-        return bookId;
-    }
-
-    /**
-     * @param bookId the bookId to set
-     */
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
     }
 
     /**
@@ -74,36 +56,20 @@ public class BurrowingEntity {
     /**
      * @return the burrowDate
      */
-    public Date getBurrowDate() {
+    public String getBurrowDate() {
         return burrowDate;
     }
 
     /**
      * @param burrowDate the burrowDate to set
      */
-    public void setBurrowDate(Date burrowDate) {
+    public void setBurrowDate(String burrowDate) {
         this.burrowDate = burrowDate;
-    }
-
-    /**
-     * @return the dueDate
-     */
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    /**
-     * @param dueDate the dueDate to set
-     */
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
     }
 
     @Override
     public String toString() {
-        return "BurrowingEntity{" + "burrowingId=" + burrowingId + ", bookId=" + bookId + ", memberId=" + memberId + ", burrowDate=" + burrowDate + ", dueDate=" + dueDate + '}';
+        return "BurrowingEntity{" + "burrowingId=" + burrowingId + ", memberId=" + memberId + ", burrowDate=" + burrowDate + '}';
     }
-    
-    
 
 }
