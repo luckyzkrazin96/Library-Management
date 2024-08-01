@@ -66,4 +66,9 @@ public class BookServiceImpl implements BookService {
         return new BookDto(entity.getBookId(), entity.getCategoryId(), entity.getTitle(), entity.getAuthor(), entity.getQty());
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        return bookDao.getLatestId();
+    }
+
 }

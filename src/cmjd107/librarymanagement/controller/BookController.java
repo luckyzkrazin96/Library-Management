@@ -14,26 +14,30 @@ import java.util.ArrayList;
  * @author User
  */
 public class BookController {
-    
+
     BookService bookService = (BookService) ServiceFactory.getInstance().getService(ServiceFactory.ServiceType.BOOK);
-    
-    public String save(BookDto bookDto) throws Exception{
+
+    public String save(BookDto bookDto) throws Exception {
         return bookService.save(bookDto);
     }
-    
-    public String update(BookDto dto) throws Exception{
+
+    public String update(BookDto dto) throws Exception {
         return bookService.Update(dto);
     }
-    
-    public String delete(String id) throws Exception{
+
+    public String delete(String id) throws Exception {
         return bookService.Delete(id);
     }
-    
-    public BookDto getBookById(String id) throws Exception{
+
+    public BookDto getBookById(String id) throws Exception {
         return bookService.get(id);
     }
-    
-    public ArrayList<BookDto> getAllBooks() throws Exception{
+
+    public ArrayList<BookDto> getAllBooks() throws Exception {
         return bookService.getAll();
+    }
+
+    public String getLatestId() throws Exception {
+        return bookService.getLatestId();
     }
 }

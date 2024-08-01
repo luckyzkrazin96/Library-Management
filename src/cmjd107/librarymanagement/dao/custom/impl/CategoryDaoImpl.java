@@ -64,4 +64,15 @@ public class CategoryDaoImpl implements CategoryDao {
         return null;
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        String latestId = null;
+        ResultSet rst = CrudUtil.executeQuery("SELECT CategoryId FROM Category ORDER BY CategoryId DESC LIMIT 1");
+        if (rst.next()) {
+            latestId = rst.getString("CategoryId");
+        }
+
+        return latestId;
+    }
+
 }

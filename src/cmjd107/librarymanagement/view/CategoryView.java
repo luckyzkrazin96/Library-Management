@@ -27,6 +27,7 @@ public class CategoryView extends javax.swing.JPanel {
         CATEGORY_CONTROLLER = new CategoryController();
         initComponents();
         loadTable();
+        loadCategoryId();
     }
 
     /**
@@ -55,6 +56,7 @@ public class CategoryView extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Category Id");
 
+        txtCategoryId.setEditable(false);
         txtCategoryId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -216,6 +218,7 @@ public class CategoryView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, rst);
             clearForm();
             loadTable();
+            
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -224,6 +227,7 @@ public class CategoryView extends javax.swing.JPanel {
     private void clearForm() {
         txtCategoryId.setText("");
         txtCategoryName.setText("");
+        loadCategoryId();
     }
 
     private void updateCategory() {
@@ -266,6 +270,22 @@ public class CategoryView extends javax.swing.JPanel {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void loadCategoryId() {
+        try {
+            String latestId = CATEGORY_CONTROLLER.getLatestId();
+            if (latestId == null) {
+                txtCategoryId.setText("C001");
+            }else{
+                int idNum = Integer.parseInt(latestId.substring(1));
+                idNum++;
+                String newId = String.format("C%03d", idNum);
+                txtCategoryId.setText(newId);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

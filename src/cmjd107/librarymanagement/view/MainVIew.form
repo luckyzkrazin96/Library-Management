@@ -160,6 +160,9 @@
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Burrow Books"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblBurrowBooksMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblReturnBooks">
           <Properties>

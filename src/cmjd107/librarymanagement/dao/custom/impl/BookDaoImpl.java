@@ -57,4 +57,15 @@ public class BookDaoImpl implements BookDao {
         return entities;
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        String latestId = null;
+        ResultSet rst = CrudUtil.executeQuery("SELECT bookId FROM book ORDER BY bookId DESC LIMIT 1");
+        if (rst.next()) {
+            latestId = rst.getString("bookId");
+        }
+        
+        return latestId;
+    }
+
 }

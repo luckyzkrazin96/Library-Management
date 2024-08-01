@@ -76,4 +76,9 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity(userDto.getUserId(), userDto.getUserName(), userDto.getPassword());
         return userEntity;
     }
+
+    @Override
+    public String getLatestId() throws Exception {
+        return userDao.getLatestId();
+    }
 }

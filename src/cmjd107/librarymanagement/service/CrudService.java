@@ -21,4 +21,6 @@ public interface CrudService<T, ID> extends SuperService {
     T get(ID id) throws Exception;
 
     ArrayList<T> getAll() throws Exception;
+    
+    String getLatestId() throws Exception;
 }

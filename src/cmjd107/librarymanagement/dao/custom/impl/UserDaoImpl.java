@@ -64,4 +64,15 @@ public class UserDaoImpl implements UserDao {
         return null;
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        String latestId = null;
+        ResultSet rst = CrudUtil.executeQuery("SELECT UserId FROM User ORDER BY UserId DESC LIMIT 1");
+        if (rst.next()) {
+            latestId = rst.getString("UserId");
+        }
+
+        return latestId;
+    }
+
 }

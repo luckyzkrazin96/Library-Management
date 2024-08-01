@@ -35,4 +35,8 @@ public class MemberController {
     public ArrayList<MemberDto> getAllMembers() throws Exception{
         return memberService.getAll();
     }
+    
+    public String getLatestId() throws Exception {
+        return memberService.getLatestId();
+    }
 }

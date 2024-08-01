@@ -67,4 +67,9 @@ public class MemberServiceImpl implements MemberService {
         return new MemberDto(entity.getMemberId(), entity.getName(), entity.getAddress(), entity.getContactNumber());
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        return memberDao.getLatestId();
+    }
+
 }

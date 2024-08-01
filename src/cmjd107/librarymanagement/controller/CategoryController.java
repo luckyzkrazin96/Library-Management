@@ -40,4 +40,8 @@ public class CategoryController {
     public CategoryDto getCategoryByName(String name) throws Exception{
         return categoryService.getCategorybyName(name);
     }
+    
+    public String getLatestId() throws Exception {
+        return categoryService.getLatestId();
+    }
 }

@@ -32,6 +32,7 @@ public class BookView extends javax.swing.JPanel {
         initComponents();
         loadCmbCategories();
         loadBooks();
+        loadBookId();
     }
 
     /**
@@ -69,6 +70,7 @@ public class BookView extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Qty");
 
+        txtBookId.setEditable(false);
         txtBookId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -286,6 +288,7 @@ public class BookView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, rst);
             clearForm();
             loadBooks();
+            
         } catch (Exception ex) {
             Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -297,6 +300,7 @@ public class BookView extends javax.swing.JPanel {
         txtAuthor.setText("");
         txtQty.setText("");
         cmbCategory.setSelectedIndex(-1);
+        loadBookId();
     }
 
     private void updateBook() {
@@ -338,6 +342,22 @@ public class BookView extends javax.swing.JPanel {
             loadBooks();
         } catch (Exception ex) {
             Logger.getLogger(BookView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadBookId() {
+        try {
+            String latestId = BOOK_CONTROLLER.getLatestId();
+            if (latestId == null) {
+                txtBookId.setText("B001");
+            }else{
+                int idNum = Integer.parseInt(latestId.substring(1));
+                idNum++;
+                String newId = String.format("B%03d", idNum);
+                txtBookId.setText(newId);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

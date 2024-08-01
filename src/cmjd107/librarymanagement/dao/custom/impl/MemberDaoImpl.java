@@ -55,4 +55,15 @@ public class MemberDaoImpl implements MemberDao {
         return memberEntities;
     }
 
+    @Override
+    public String getLatestId() throws Exception {
+        String latestId = null;
+        ResultSet rst = CrudUtil.executeQuery("SELECT MemberId FROM Member ORDER BY MemberId DESC LIMIT 1");
+        if (rst.next()) {
+            latestId = rst.getString("MemberId");
+        }
+
+        return latestId;
+    }
+
 }

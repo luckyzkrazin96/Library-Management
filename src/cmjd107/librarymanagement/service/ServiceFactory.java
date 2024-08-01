@@ -5,6 +5,7 @@
 package cmjd107.librarymanagement.service;
 
 import cmjd107.librarymanagement.service.custom.impl.BookServiceImpl;
+import cmjd107.librarymanagement.service.custom.impl.BurrowingServiceImpl;
 import cmjd107.librarymanagement.service.custom.impl.CategoryServiceImpl;
 import cmjd107.librarymanagement.service.custom.impl.MemberServiceImpl;
 import cmjd107.librarymanagement.service.custom.impl.UserServiceImpl;
@@ -36,14 +37,16 @@ public class ServiceFactory {
                 return new MemberServiceImpl();
             case CATEGORY:
                 return new CategoryServiceImpl();
-            case BOOK :
+            case BOOK:
                 return new BookServiceImpl();
+            case BURROWING:
+                return new BurrowingServiceImpl();
             default:
                 return null;
         }
     }
 
     public enum ServiceType {
-        USER, MEMBER, CATEGORY, BOOK
+        USER, MEMBER, CATEGORY, BOOK, BURROWING
     }
 }

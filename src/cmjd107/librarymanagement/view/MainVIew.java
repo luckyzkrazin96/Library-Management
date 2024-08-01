@@ -83,6 +83,11 @@ public class MainVIew extends javax.swing.JFrame {
         lblBurrowBooks.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblBurrowBooks.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblBurrowBooks.setText("Burrow Books");
+        lblBurrowBooks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBurrowBooksMouseClicked(evt);
+            }
+        });
 
         lblReturnBooks.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblReturnBooks.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -184,6 +189,10 @@ public class MainVIew extends javax.swing.JFrame {
     private void lblManageUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManageUserMouseClicked
         loadPanel(new UserView());
     }//GEN-LAST:event_lblManageUserMouseClicked
+
+    private void lblBurrowBooksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBurrowBooksMouseClicked
+        loadPanel(new BurrowingView());
+    }//GEN-LAST:event_lblBurrowBooksMouseClicked
 
     /**
      * @param args the command line arguments

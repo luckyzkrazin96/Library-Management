@@ -27,6 +27,7 @@ public class MemberView extends javax.swing.JPanel {
         MEMBER_CONTROLLER = new MemberController();
         initComponents();
         loadTable();
+        loadMemberId();
     }
 
     /**
@@ -62,6 +63,7 @@ public class MemberView extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Contact Number");
 
+        txtMemberId.setEditable(false);
         txtMemberId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -255,6 +257,7 @@ public class MemberView extends javax.swing.JPanel {
         txtMemberName.setText("");
         txtAddress.setText("");
         txtContactNumber.setText("");
+        loadMemberId();
     }
 
     private void searchMember() {
@@ -295,6 +298,22 @@ public class MemberView extends javax.swing.JPanel {
             loadTable();
         } catch (Exception ex) {
             Logger.getLogger(MemberView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadMemberId() {
+        try {
+            String latestId = MEMBER_CONTROLLER.getLatestId();
+            if (latestId == null) {
+                txtMemberId.setText("M001");
+            } else {
+                int idNum = Integer.parseInt(latestId.substring(1));
+                idNum++;
+                String newId = String.format("M%03d", idNum);
+                txtMemberId.setText(newId);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

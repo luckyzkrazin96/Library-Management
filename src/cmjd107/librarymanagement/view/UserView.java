@@ -27,6 +27,7 @@ public class UserView extends javax.swing.JPanel {
         USER_CONTROLLER = new UserController();
         initComponents();
         loadTable();
+        loadUserId();
 
     }
 
@@ -58,6 +59,7 @@ public class UserView extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("User Id");
 
+        txtUserId.setEditable(false);
         txtUserId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -167,7 +169,7 @@ public class UserView extends javax.swing.JPanel {
                             .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(56, 56, 56)))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -241,6 +243,7 @@ public class UserView extends javax.swing.JPanel {
         txtUserId.setText("");
         txtUserName.setText("");
         txtPassword.setText("");
+        loadUserId();
     }
 
     private void searchUser() {
@@ -281,6 +284,22 @@ public class UserView extends javax.swing.JPanel {
             loadTable();
         } catch (Exception ex) {
             Logger.getLogger(UserView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadUserId() {
+        try {
+            String latestId = USER_CONTROLLER.getLatestId();
+            if (latestId == null) {
+                txtUserId.setText("U001");
+            } else {
+                int idNum = Integer.parseInt(latestId.substring(1));
+                idNum++;
+                String newId = String.format("U%03d", idNum);
+                txtUserId.setText(newId);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BurrowingView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
